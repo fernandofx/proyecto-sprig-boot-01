@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fracments/head"></head>
+<body>
+<div class="container" th:replace="fracments/header"></div>
+<h1 class="p-9 m-4 text-center">[[${pageTitle}]]</h1>
+<div class="container ">
+    <form th:action="@{/cursos/save}"
+          method="post"
+          enctype="multipart/form-data"
+          th:object="${curso}">
+        <div>
+            <input type="hidden" th:field="*{id}">
+        </div>
+
+        <div class="p-3">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="titulo">Titulo</label>
+                <div class="col-sm-5">
+                    <input type="text" th:field="*{titulo}" required minlength="2"
+                           maxlength="128" class="form-control" id="titulo">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="descripcion">Descripcion</label>
+                <div class="col-sm-5">
+                    <input type="text" th:field="*{descripcion}" required minlength="2"
+                           maxlength="256" class="form-control" id="descripcion">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="nivel">Nivel</label>
+                <div class="col-sm-5">
+                    <input type="text" th:field="*{nivel}" required
+                           min="2" class="form-control" id="nivel">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="publicado">Publicado</label>
+                <div class="col-sm-1 m-0" >
+                    <input type="checkbox" th:field="*{publicado}"  class="form-control" id="publicado">
+                </div>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Guardar" class="btn btn-primary btn-sm mr-2">
+                <input type="submit" id="btnCancelar" value="Cancelar" class="btn btn-primary btn-sm mr-2">
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
