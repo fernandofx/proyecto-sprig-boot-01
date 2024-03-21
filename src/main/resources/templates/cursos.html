@@ -10,9 +10,35 @@
             [[${message}]]
             <buton type="button" class="close" data-dismiss="alert" aria-label="close">✚</buton>
         </div>
+        <div class="container my-3 p-0">
+            <form id="searchForm" th:action="@{/cursos}">
+                <div class="row">
+                    <div class="col-md-6 input-group mt-3">
+                        <div class="search">
+                            <i class="">
+                                <input id="keyword" type="text" name="keyword" th:value="${keyword}" required
+                                        class="form-control mb-3" placeholder="Ingrese un Nombre">
+                                <button type="submit" class="btn btn-secondary" onclick="search()">Buscar</button>
+                            </i>
+                        </div>
+                    </div>
+                    <div class="col-md-6 input-group mt-3">
+                            <div class="mr-3">
+                                <label  for="pageSize" >Elementos por página</label>
+                            </div>
 
+                            <select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
+                                    class="form-control" id="pageSize">
+                                <option  th:each="s :  ${ {3, 6, 9} }" th:value="${s}" th:text="${s}"
+                                         th:selected="${ s == pageSize }">
+                                </option>
+                            </select>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="container">
+    <div class="container" th:if="${cursos.size() > 0}">
         <div class="row mb-3">
             <div class="col-md-12 d-flex justify-content-start">
                 <a th:href="@{/export/pdf}" class="btn btn-danger">Genera DPF</a>
@@ -49,6 +75,38 @@
             </tbody>
         </table>
     </div>
+
+    <div class="container" th:unless="${cursos.size() > 0}">
+        <span>Cursos no encontrados</span>
+    </div>
+    <nav aria-label="Pagination" th:if="${TotalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fracments/paging :: paging(1,'<<','Primera página')"></a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fracments/paging :: paging(${currentPage-1},'Anterior','Anterior página')"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1,currentPage + 2 < TotalPages ? currentPage + 2 : TotalPages)}">
+                <a th:replace="fracments/paging :: paging(${page},${page},'Page' + ${page})"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage + 2 > TotalPages}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == TotalPages} ? 'disabled'">
+                <a th:replace="fracments/paging :: paging(${currentPage + 1},'Siguiente','Siguiente página')"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == TotalPages} ? 'disabled'">
+                <a th:replace="fracments/paging :: paging(${TotalPages},'>>','Última página')"></a>
+            </li>
+        </ul>
+    </nav>
+
+
     <div th:replace="fracments/footer"></div>
 </body>
 </html>
